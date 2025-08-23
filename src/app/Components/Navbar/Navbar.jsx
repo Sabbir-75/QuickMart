@@ -5,128 +5,117 @@ import { Menu, X, Sun, Moon } from "lucide-react";
 import CommonButton from "../Button/Button";
 import { RiLoginCircleFill } from "react-icons/ri";
 import Link from "next/link";
+import { signOut, useSession } from "next-auth/react";
+
 const Navbar = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isDark, setIsDark] = useState(false);
-    const navLinks = [{
-        href: "#",
-        text: "Home"
-    }, {
-        href: "#",
-        text: "Products"
-    }, {
-        href: "#",
-        text: "Dashboard"
-    }];
+
+    const navLinks = [
+        { href: "/", text: "Home" },
+        { href: "/products", text: "Products" },
+        { href: "#", text: "Dashboard" },
+    ];
+
     useEffect(() => {
         if (isDark) {
-            document.documentElement.classList.add('dark');
+            document.documentElement.classList.add("dark");
         } else {
-            document.documentElement.classList.remove('dark');
+            document.documentElement.classList.remove("dark");
         }
     }, [isDark]);
+
     useEffect(() => {
         if (isMenuOpen) {
-            document.body.style.overflow = 'hidden';
+            document.body.style.overflow = "hidden";
         } else {
-            document.body.style.overflow = 'auto';
+            document.body.style.overflow = "auto";
         }
         return () => {
-            document.body.style.overflow = 'auto';
+            document.body.style.overflow = "auto";
         };
     }, [isMenuOpen]);
 
-    return <>
-        <header className="sticky top-0 z-50 w-full bg-white/80 dark:bg-gray-900/80 backdrop-blur-md border-b border-gray-200 dark:border-gray-800">
-            <div className=" px-4 sm:px-6 lg:px-8">
-                <div className="flex h-16 items-center justify-between">
-                    { }
-                    <div className="flex-shrink-0">
-                        <a href="#" className="flex items-center space-x-2">
-                            <div className="max-w-[150px] rounded-full flex items-center justify-center">
-                                <img src="/images/Yellow_Orange_Illustration_Mart_Logo__1_-removebg-preview.png" alt="QuickMart" />
-                            </div>
-                        </a>
-                    </div>
+    const { data: session, status } = useSession();
+    console.log(session);
 
-                    { }
-                    <nav className="hidden md:flex items-center space-x-8">
-                        {navLinks.map(link => <a key={link.text} href={link.href} className="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors duration-300">
-                            {link.text}
-                        </a>)}
-                    </nav>
+    return (
+        <>
+            <header className="sticky top-0 z-50 w-full bg-white/80 dark:bg-gray-900/80 backdrop-blur-md border-b border-gray-200 dark:border-gray-800">
+                <div className=" px-4 sm:px-6 lg:px-8">
+                    <div className="flex h-16 items-center justify-between">
+                        {/* Logo */}
+                        <div className="flex-shrink-0">
+                            <a href="#" className="flex items-center space-x-2">
+                                <div className="max-w-[150px] rounded-full flex items-center justify-center">
+                                    <img
+                                        src="/images/Yellow_Orange_Illustration_Mart_Logo__1_-removebg-preview.png"
+                                        alt="QuickMart"
+                                    />
+                                </div>
+                            </a>
+                        </div>
 
-                    { }
-                    <div className="hidden md:flex items-center space-x-3">
-                        <button onClick={() => setIsDark(!isDark)} className="p-2 rounded-full text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
-                            {isDark ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
-                        </button>
-                        <Link href={'/login'}>
-                            <CommonButton icon={<RiLoginCircleFill size={20} />}>Login</CommonButton>
-                        </Link>
-                        {/* {
-                            !session ? (
-                                <Link href={'/login'}>
+                        {/* Nav Links */}
+                        <nav className="hidden md:flex items-center space-x-8">
+                            {navLinks.map((link) => (
+                                <a
+                                    key={link.text}
+                                    href={link.href}
+                                    className="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors duration-300"
+                                >
+                                    {link.text}
+                                </a>
+                            ))}
+                        </nav>
+
+                        {/* Actions */}
+                        <div className="hidden md:flex items-center space-x-3">
+                            <button
+                                onClick={() => setIsDark(!isDark)}
+                                className="p-2 rounded-full text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                            >
+                                {isDark ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+                            </button>
+
+                            {status === "loading" ? null : !session ? (
+                                <Link href={"/login"}>
                                     <CommonButton icon={<RiLoginCircleFill size={20} />}>Login</CommonButton>
                                 </Link>
                             ) : (
-                                <>
-                                    <CommonButton onClick={() => signOut()} icon={<RiLoginCircleFill size={20} />}>Logout</CommonButton>
-                                </>
-                            )
-                        } */}
+                                <button onClick={() => signOut({ callbackUrl: "/" })}>
+                                    <CommonButton
+                                        icon={<RiLoginCircleFill size={20} />}
+                                    >
+                                        Logout
+                                    </CommonButton>
+                                </button>
 
-                    </div>
-
-                    { }
-                    <div className="md:hidden flex items-center">
-                        <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="p-2 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md" aria-label="Toggle menu">
-                            { }
-                            <Menu className={`h-6 w-6 transition-transform duration-300 ${isMenuOpen ? 'rotate-90 scale-0' : 'rotate-0 scale-100'}`} />
-                            <X className={`h-6 w-6 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 transition-transform duration-300 ${isMenuOpen ? 'rotate-0 scale-100' : '-rotate-90 scale-0'}`} />
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </header>
-
-        <div className={`fixed inset-0 z-40 bg-black bg-opacity-50 transition-opacity md:hidden ${isMenuOpen ? "opacity-100" : "opacity-0 pointer-events-none"}`} onClick={() => setIsMenuOpen(false)} aria-hidden="true"></div>
-        <div className={`fixed top-0 left-0 h-full w-4/5 max-w-sm z-50 bg-white dark:bg-gray-900 shadow-xl transform transition-transform duration-300 ease-in-out md:hidden ${isMenuOpen ? "translate-x-0" : "-translate-x-full"}`}>
-            <div className="flex flex-col h-full">
-                { }
-                <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-800">
-                    <a href="#" className="flex items-center space-x-2">
-                        <div className="w-8 h-8 bg-emerald-600 rounded-full flex items-center justify-center">
-                            <span className="text-white font-bold text-sm">T</span>
+                            )}
                         </div>
-                        <span className="font-bold text-lg text-gray-900 dark:text-white">TechBlog</span>
-                    </a>
-                    <button onClick={() => setIsMenuOpen(false)} className="p-2 text-gray-500 dark:text-gray-400 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800" aria-label="Close menu">
-                        <X className="h-6 w-6" />
-                    </button>
-                </div>
 
-                { }
-                <nav className="flex-grow p-4">
-                    <div className="flex flex-col space-y-2">
-                        {navLinks.map(link => <a key={link.text} href={link.href} className="px-3 py-2 text-base font-medium text-gray-700 dark:text-gray-200 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800" onClick={() => setIsMenuOpen(false)}>
-                            {link.text}
-                        </a>)}
+                        {/* Mobile Menu Button */}
+                        <div className="md:hidden flex items-center">
+                            <button
+                                onClick={() => setIsMenuOpen(!isMenuOpen)}
+                                className="p-2 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md"
+                                aria-label="Toggle menu"
+                            >
+                                <Menu
+                                    className={`h-6 w-6 transition-transform duration-300 ${isMenuOpen ? "rotate-90 scale-0" : "rotate-0 scale-100"
+                                        }`}
+                                />
+                                <X
+                                    className={`h-6 w-6 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 transition-transform duration-300 ${isMenuOpen ? "rotate-0 scale-100" : "-rotate-90 scale-0"
+                                        }`}
+                                />
+                            </button>
+                        </div>
                     </div>
-                </nav>
-
-                { }
-                <div className="p-4 border-t border-gray-200 dark:border-gray-800">
-                    <div className="flex items-center justify-between mb-4">
-                        <CommonButton icon={<RiLoginCircleFill size={20} />}>Login</CommonButton>
-                        <button onClick={() => setIsDark(!isDark)} className="p-2 rounded-full text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
-                            {isDark ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
-                        </button>
-                    </div>
-
                 </div>
-            </div>
-        </div>
-    </>;
+            </header>
+        </>
+    );
 };
+
 export default Navbar;

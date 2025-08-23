@@ -26,13 +26,13 @@ export default function RootLayout({ children }) {
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <AuthProvider>
-          <div>
+          
             <Navbar></Navbar>
             <div className="min-h-[calc(100vh-320px)]">
               {children}
             </div>
             <Footer></Footer>
-          </div>
+         
         </AuthProvider>
       </body>
     </html>

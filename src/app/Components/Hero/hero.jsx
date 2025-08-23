@@ -1,9 +1,13 @@
 // app/components/Hero.tsx
+"use client"
 import React from "react";
 import Link from "next/link";
 import CommonButton from "../Button/Button";
+import { useSession } from "next-auth/react";
 
 const Hero = () => {
+    const { data: session } = useSession()
+    console.log(session);
     return (
         <section className="bg-[url('/images/How-to-Safely-Enjoy-Online-Shopping.jpg')] bg-no-repeat bg-cover bg-center text-primary min-h-[80vh]">
             <div className="max-w-7xl mx-auto px-6 py-24">
@@ -19,10 +23,11 @@ const Hero = () => {
                         <Link href={"/products"}>
                             <CommonButton>Browse Products</CommonButton>
                         </Link>
-                        <Link href={"/products"}>
-                            <CommonButton>Register</CommonButton>
-                        </Link>
-
+                        {
+                            !session ? <Link href={"/login"}>
+                                <CommonButton>Register</CommonButton>
+                            </Link> : ""
+                        }
                     </div>
                 </div>
             </div>

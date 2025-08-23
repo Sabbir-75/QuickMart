@@ -56,15 +56,11 @@ export default function Login() {
       </div>
 
       { }
-      <div className="grid grid-cols-3 gap-2">
+      <div className="w-full">
         {[{
-          icon: <AppleIcon />
-        }, {
           icon: <GoogleIcon />
-        }, {
-          icon: <XIcon />
-        }].map((item, index) => <button onClick={() => signIn("google")} key={index} className="flex cursor-pointer items-center justify-center h-9 px-3 rounded-md border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-black hover:bg-zinc-50 dark:hover:bg-zinc-900 hover:text-zinc-900 dark:hover:text-zinc-50 transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-zinc-950 dark:focus-visible:ring-zinc-300">
-          {item.icon}
+        }].map((item, index) => <button onClick={() => signIn("google", { callbackUrl: "/" })} key={index} className="flex gap-1.5 cursor-pointer items-center justify-center h-9 w-full px-3 py-6 rounded-md border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-black hover:bg-zinc-50 dark:hover:bg-zinc-900 hover:text-zinc-900 dark:hover:text-zinc-50 transition-colors focus-visible:outline-none focus-visible:ring-1 font-semibold focus-visible:ring-zinc-950 dark:focus-visible:ring-zinc-300">
+          {item.icon} login with Google
         </button>)}
       </div>
       { }
