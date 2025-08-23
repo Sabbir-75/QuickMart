@@ -1,18 +1,17 @@
-import React from 'react';
+"use client"
+import React, { useEffect, useState } from 'react';
 import Hero from './Components/Hero/hero';
 import Container from './Components/Container/Container';
+import axios from 'axios';
 
 const page = () => {
-    const products = [
-        { "title": "Tablet", "productName": "iPad 10th Gen", "brand": "Apple", "price": 55000, "image": "https://store.storeimages.cdn-apple.com/ipad-10th-gen.jpg" },
-        { "title": "TV", "productName": "Bravia 43 Inch", "brand": "Sony", "price": 48000, "image": "https://www.sony-asia.com/image/bravia-43.jpg" },
-        { "title": "Refrigerator", "productName": "Double Door 310L", "brand": "LG", "price": 39000, "image": "https://www.lg.com/lg-refrigerator-310l.jpg" },
-        { "title": "Washing Machine", "productName": "Front Load 7kg", "brand": "Samsung", "price": 36000, "image": "https://images.samsung.com/is/image/samsung/washing-machine-7kg.jpg" },
-        { "title": "AC", "productName": "Inverter 1.5 Ton", "brand": "Gree", "price": 52000, "image": "https://static.gree.com/ac-inverter-1.5ton.jpg" },
-        { "title": "Microwave Oven", "productName": "23L Solo", "brand": "Panasonic", "price": 8500, "image": "https://panasonic.com.bd/microwave-23l.jpg" },
-        { "title": "Blender", "productName": "Nutri Blender", "brand": "Philips", "price": 4500, "image": "https://philips.com.bd/blender.jpg" },
-        { "title": "Shoes", "productName": "Air Zoom Pegasus", "brand": "Nike", "price": 9500, "image": "https://static.nike.com/air-zoom-pegasus.jpg" }
-    ]
+    const [products, setProducts] = useState([]);
+
+    useEffect(() => {
+        axios.get("http://localhost:5000/products/newest")
+            .then(res => setProducts(res.data))
+            .catch(err => console.log(err));
+    }, []);
     return (
         <div>
             <Hero></Hero>
