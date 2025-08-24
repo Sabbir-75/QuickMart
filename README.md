@@ -32,5 +32,26 @@ cd quickmart
 # Install dependencies
 npm install
 
-# Run the development server
+     "axios"
+    "class-variance-authority"
+    "clsx"
+    "icons"
+    "lucide-react"
+    "next"
+    "next-auth"
+    "react"
+    "react-dom"
+    "react-hook-form"
+    "react-icons"
+    "tailwind-merge"
 npm run dev
+
+## Scripts
+
+```json
+"scripts": {
+  "dev": "next dev --turbopack",
+  "build": "next build --turbopack",
+  "start": "next start",
+  "lint": "eslint"
+}
