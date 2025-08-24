@@ -6,6 +6,7 @@ import CommonButton from "../Button/Button";
 import { RiLoginCircleFill } from "react-icons/ri";
 import Link from "next/link";
 import { signOut, useSession } from "next-auth/react";
+import SimpleDropdown from "../Dropdown/Dropdown";
 
 const Navbar = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -14,7 +15,6 @@ const Navbar = () => {
     const navLinks = [
         { href: "/", text: "Home" },
         { href: "/products", text: "Products" },
-        { href: "#", text: "Dashboard" },
     ];
 
     useEffect(() => {
@@ -42,7 +42,7 @@ const Navbar = () => {
     return (
         <>
             <header className="sticky top-0 z-50 w-full bg-white/80 dark:bg-gray-900/80 backdrop-blur-md border-b border-gray-200 dark:border-gray-800">
-                <div className=" px-4 sm:px-6 lg:px-8">
+                <div className="px-4 sm:px-6 lg:px-8">
                     <div className="flex h-16 items-center justify-between">
                         {/* Logo */}
                         <div className="flex-shrink-0">
@@ -56,7 +56,7 @@ const Navbar = () => {
                             </a>
                         </div>
 
-                        {/* Nav Links */}
+                        {/* Nav Links (Desktop) */}
                         <nav className="hidden md:flex items-center space-x-8">
                             {navLinks.map((link) => (
                                 <a
@@ -67,9 +67,10 @@ const Navbar = () => {
                                     {link.text}
                                 </a>
                             ))}
+                            <SimpleDropdown />
                         </nav>
 
-                        {/* Actions */}
+                        {/* Actions (Desktop) */}
                         <div className="hidden md:flex items-center space-x-3">
                             <button
                                 onClick={() => setIsDark(!isDark)}
@@ -80,22 +81,21 @@ const Navbar = () => {
 
                             {status === "loading" ? null : !session ? (
                                 <Link href={"/login"}>
-                                    <CommonButton icon={<RiLoginCircleFill size={20} />}>Login</CommonButton>
+                                    <CommonButton icon={<RiLoginCircleFill size={20} />}>
+                                        Login
+                                    </CommonButton>
                                 </Link>
                             ) : (
                                 <button onClick={() => signOut({ callbackUrl: "/" })}>
-                                    <CommonButton
-                                        icon={<RiLoginCircleFill size={20} />}
-                                    >
+                                    <CommonButton icon={<RiLoginCircleFill size={20} />}>
                                         Logout
                                     </CommonButton>
                                 </button>
-
                             )}
                         </div>
 
                         {/* Mobile Menu Button */}
-                        <div className="md:hidden flex items-center">
+                        <div className="md:hidden z-40 flex items-center">
                             <button
                                 onClick={() => setIsMenuOpen(!isMenuOpen)}
                                 className="p-2 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md"
@@ -113,6 +113,52 @@ const Navbar = () => {
                         </div>
                     </div>
                 </div>
+
+                {/* Mobile Menu Drawer */}
+                {isMenuOpen && (
+                    <div className="md:hidden fixed inset-0 z-30 bg-black dark:bg-gray-900 flex flex-col items-center justify-center space-y-6">
+                        {/* Nav Links */}
+                        {navLinks.map((link) => (
+                            <a
+                                key={link.text}
+                                href={link.href}
+                                onClick={() => setIsMenuOpen(false)}
+                                className="text-lg font-medium text-gray-700 dark:text-gray-300 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors"
+                            >
+                                {link.text}
+                            </a>
+                        ))}
+                        <SimpleDropdown />
+
+                        {/* Dark Mode Toggle */}
+                        <button
+                            onClick={() => setIsDark(!isDark)}
+                            className="p-2 rounded-full text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                        >
+                            {isDark ? <Sun className="h-6 w-6" /> : <Moon className="h-6 w-6" />}
+                        </button>
+
+                        {/* Auth Button */}
+                        {status === "loading" ? null : !session ? (
+                            <Link href={"/login"} onClick={() => setIsMenuOpen(false)}>
+                                <CommonButton icon={<RiLoginCircleFill size={20} />}>
+                                    Login
+                                </CommonButton>
+                            </Link>
+                        ) : (
+                            <button
+                                onClick={() => {
+                                    signOut({ callbackUrl: "/" });
+                                    setIsMenuOpen(false);
+                                }}
+                            >
+                                <CommonButton icon={<RiLoginCircleFill size={20} />}>
+                                    Logout
+                                </CommonButton>
+                            </button>
+                        )}
+                    </div>
+                )}
             </header>
         </>
     );

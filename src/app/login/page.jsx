@@ -1,6 +1,7 @@
 'use client';
 
-import { signIn, useSession } from 'next-auth/react';
+import { signIn } from 'next-auth/react';
+import { useSearchParams } from 'next/navigation';
 import React, { useState } from 'react';
 const UserIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5 text-zinc-600 dark:text-zinc-400">
   <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
@@ -36,8 +37,8 @@ export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const session = useSession()
-  console.log(session);
+  const searchParams = useSearchParams();
+  const callbackUrl = searchParams.get("callbackUrl") || "/products";
 
   return (<div className="relative w-full flex items-center justify-center font-sans overflow-hidden">
 
@@ -59,7 +60,7 @@ export default function Login() {
       <div className="w-full">
         {[{
           icon: <GoogleIcon />
-        }].map((item, index) => <button onClick={() => signIn("google", { callbackUrl: "/" })} key={index} className="flex gap-1.5 cursor-pointer items-center justify-center h-9 w-full px-3 py-6 rounded-md border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-black hover:bg-zinc-50 dark:hover:bg-zinc-900 hover:text-zinc-900 dark:hover:text-zinc-50 transition-colors focus-visible:outline-none focus-visible:ring-1 font-semibold focus-visible:ring-zinc-950 dark:focus-visible:ring-zinc-300">
+        }].map((item, index) => <button onClick={() => signIn("google", { callbackUrl })} key={index} className="flex gap-1.5 cursor-pointer items-center justify-center h-9 w-full px-3 py-6 rounded-md border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-black hover:bg-zinc-50 dark:hover:bg-zinc-900 hover:text-zinc-900 dark:hover:text-zinc-50 transition-colors focus-visible:outline-none focus-visible:ring-1 font-semibold focus-visible:ring-zinc-950 dark:focus-visible:ring-zinc-300">
           {item.icon} login with Google
         </button>)}
       </div>
